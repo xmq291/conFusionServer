@@ -20,7 +20,6 @@ favoriteRouter.route('/')
     }), (err) => next(err)
     .catch((err) => next(err));
 })
-
 .post(authenticate.verifyUser, (req, res, next) => {
     Favorites.findOne({ user: req.user._id })
     .then((favorite) => {
@@ -29,7 +28,7 @@ favoriteRouter.route('/')
             // next check if dish to be added already exists
             for (let i = 0; i < req.body.length; i++) {
                 if (favorite.dishes.indexOf(req.body[i]._id) !== -1) {
-                    err = new Error('This dish has already exists!');
+                    err = new Error('This dish has already exist!');
                     err.status = 403;
                     return next(err);
                 }
@@ -43,7 +42,7 @@ favoriteRouter.route('/')
             }, (err) => next(err));
         } 
         else {
-            Favorite.create({ user: req.user._id })
+            Favorites.create({ user: req.user._id })
             // create a favorite document if such a document corresponding to this user does not already exist
             .then((favorite) => {
                 for (let i = 0; i < req.body.length; i++) {
@@ -60,12 +59,10 @@ favoriteRouter.route('/')
     }, (err) => next(err))
     .catch((err) => next(err));
 })
-
 // .put(authenticate.verifyUser, (req, res, next) => {
 //     res.statusCode = 403;
 //     res.end('PUT operation not supported on /favorites');
 // })
-
 .delete(authenticate.verifyUser, (req, res, next) => {
     Favorites.deleteOne({ user: req.user._id })
     .then((resp) => {
@@ -108,12 +105,10 @@ favoriteRouter.route('/:dishId')
     }, (err) => next(err))
     .catch((err) => next(err));
 })
-  
 // .put(authenticate.verifyUser, (req, res, next) => {
 //     res.statusCode = 403;
 //     res.end('PUT operation not supported on /favorites/:dishId');
-// })
-  
+// })  
 .delete(authenticate.verifyUser, (req, res, next) => {
     Favorites.findOne({ user: req.user._id })
     .then((favorite) => {
